@@ -1,6 +1,8 @@
+enum {size = 1024};
 struct buffer {
-    static const int size = 1024;
     char data[size];
-    char *const start = data, *const end = data+size;
-    char *pos = data;
+    char *start, *end;
+    char *pos;
 };
+
+void init_buffer(struct buffer *buf);
