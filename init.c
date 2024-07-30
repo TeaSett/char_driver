@@ -19,7 +19,7 @@ int init_module() {
 	if((my_device.class = class_create(THIS_MODULE, DRIVER_CLASS)) == NULL) {
 		printk("Device class can not be created!\n");
         ret = -1;
-		goto ret;
+		goto exit;
 	}
 
 	/* Create device file */
@@ -33,7 +33,7 @@ int init_module() {
 	cdev_init(&(my_device.dev), &(my_device.fops));
 	if(cdev_add(&(my_device.dev), my_device.num, 1) == -1) {
 		printk("Registering of device to kernel failed!\n");
-        ret = -3
+        ret = -3;
 		goto exit;
 	}
 
@@ -41,9 +41,9 @@ int init_module() {
 
 exit:
     switch(ret) {
-    case -3: device_destroy(my_class, my_device_nr);
-    case -2: class_destroy(my_class);
-    case -1: unregister_chrdev_region(my_device_nr, 1);
+    case -3: device_destroy(my_device.class, my_device.num);
+    case -2: class_destroy(my_device.class);
+    case -1: unregister_chrdev_region(my_device.num, 1);
     default:
         break;
     }
