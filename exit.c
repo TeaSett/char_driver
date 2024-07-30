@@ -7,5 +7,5 @@ void cleanup_module() {
 	device_destroy(my_device.class, my_device.num);
 	class_destroy(my_device.class);
 	unregister_chrdev_region(my_device.num, 1);
-	printk(DRIVER_NAME "REMOVED\n");
+	printk(KERN_INFO DRIVER_NAME " REMOVED\n");
 }
