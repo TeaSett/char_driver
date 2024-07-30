@@ -2,6 +2,7 @@
 #include <linux/uaccess.h>
 #include <linux/module.h>
 #include <linux/cdev.h>
+#include "buffer.h"
 
 #pragma once
 
@@ -12,4 +13,6 @@ struct my_device_t {
     struct cdev dev;
     dev_t num;
     struct class *class;
+
+    struct buffer buf;
 };
