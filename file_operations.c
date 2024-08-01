@@ -47,7 +47,7 @@ ssize_t write_to_d(struct file *filp, const char __user *ubuf, size_t len, loff_
     //     has_output_waiter = 0;
     // }
 
-    wait_event_interruptible(wait_queue_for_writers, buffer.wend != buffer.end);
+    wait_event_interruptible(wait_queue_for_writers, (buffer.wend != buffer.end)||(buffer.rstart != buffer.start));
 
     int to_copy = min(size, len);
     copy_from_user(buffer.data, ubuf, to_copy);
