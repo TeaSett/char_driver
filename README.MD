@@ -16,3 +16,4 @@
 * file_operations.c — реализация функций для работы с файлом драйвера (`open`, `release`, `read`, `write`);
 * my_char_driver_ioctl_calls.h — объявление вызовов ioctl;
 * ioctl_hanler.c — функция обработки вызовов ioctl;
+* install.sh — скрипт сборки и установки драйвера.
