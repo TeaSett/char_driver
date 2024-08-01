@@ -1,4 +1,4 @@
-enum {size = 1024};
+enum {size = 5};
 struct buffer {
     char data[size];
     char *start, *end;
