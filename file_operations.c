@@ -3,9 +3,8 @@
 
 extern struct my_device_t my_device;
 extern struct buffer buffer;
+extern size_t size;
 
-static DECLARE_WAIT_QUEUE_HEAD(wait_queue_for_readers);
-static DECLARE_WAIT_QUEUE_HEAD(wait_queue_for_writers);
 
 int open_d(struct inode *inode, struct file *filp) {
     printk(KERN_INFO DRIVER_NAME " OPENED!\n");
@@ -18,6 +17,9 @@ int release_d(struct inode *inode, struct file *filp) {
     return 0;
 }
 
+
+static DECLARE_WAIT_QUEUE_HEAD(wait_queue_for_readers);
+static DECLARE_WAIT_QUEUE_HEAD(wait_queue_for_writers);
 
 ssize_t read_from_d(struct file *filp, char __user *ubuf, size_t len, loff_t *offset) {
     printk(KERN_INFO "READING from " DRIVER_NAME "\n");
@@ -39,13 +41,6 @@ ssize_t read_from_d(struct file *filp, char __user *ubuf, size_t len, loff_t *of
 
 ssize_t write_to_d(struct file *filp, const char __user *ubuf, size_t len, loff_t *offset) {
     printk(KERN_INFO "WRITING to " DRIVER_NAME " %d\n", len);
-    
-    // if(my_device.write_blocking) {
-    //     has_input = 1;
-    //     wake_up_interruptible(&wait_queue_for_readers);
-    //     wait_event_interruptible(wait_queue_for_writers, has_output_waiter != 0);
-    //     has_output_waiter = 0;
-    // }
 
     wait_event_interruptible(wait_queue_for_writers, (buffer.wend != buffer.end)||(buffer.rstart != buffer.start));
     if(buffer.rstart != buffer.start) buffer.wend = buffer.rstart = buffer.start;

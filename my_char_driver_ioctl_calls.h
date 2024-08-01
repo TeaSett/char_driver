@@ -9,4 +9,4 @@
 #define MCD_OUTPUT_NONBLOCK             _IO(MCD_IOCTL_NUM, 4)
 #define MCD_INPUT_AND_OUTPUT_BLOCK      _IO(MCD_IOCTL_NUM, 5)
 #define MCD_INPUT_AND_OUTPUT_NONBLOCK   _IO(MCD_IOCTL_NUM, 6)
-// #define MCD_GET_LAST_FILE_OPERATION_INFO 	    _IOR(MCD_IOCTL_NUM, 7, 
+#define MCD_GET_BUF_SIZE 	            _IOR(MCD_IOCTL_NUM, 7, unsigned long long)

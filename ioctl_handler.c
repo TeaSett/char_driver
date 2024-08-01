@@ -2,6 +2,7 @@
 #include "my_char_driver_ioctl_calls.h"
 
 extern struct my_device_t my_device;
+extern size_t size;
 
 
 long ioctl_handler(struct file *file, unsigned int cmd, unsigned long arg) 
@@ -36,6 +37,9 @@ long ioctl_handler(struct file *file, unsigned int cmd, unsigned long arg)
         case MCD_OUTPUT_NONBLOCK: {
             my_device.read_blocking = false;
             break;
+        }
+        case MCD_GET_BUF_SIZE: {
+            return size;
         }
         // case MCD_GET_LAST_FILE_OPERATION_INFO: {
         //     ;

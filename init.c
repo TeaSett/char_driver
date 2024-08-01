@@ -1,8 +1,10 @@
+#include <linux/slab.h>
 #include "my_device.h"
 
 #define DRIVER_CLASS "my_driver_class"
 
 extern struct my_device_t my_device;
+extern size_t size;
 
 int init_module() {
     int ret = 0;
@@ -37,7 +39,8 @@ int init_module() {
 		goto exit;
 	}
 
-	init_buffer();
+	char *allocated = (char*)kmalloc(size, GFP_KERNEL);
+	init_buffer(allocated);
 
     printk(KERN_INFO "Initialize %s SUCCESS!\n", DRIVER_NAME);
 

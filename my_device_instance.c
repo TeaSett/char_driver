@@ -10,6 +10,11 @@ extern ssize_t write_to_d(struct file *filp, const char __user *ubuf, size_t len
 
 extern long ioctl_handler(struct file *file, unsigned int cmd, unsigned long arg);
 
+struct buffer buffer;
+MODULE_PARM_DESC(size, "Parameter used to set char driver buffer size");
+module_param(bufsize, ulong, S_IRUGO);
+size_t size;
+
 struct my_device_t my_device = {
     .fops = {
         .owner = THIS_MODULE,
