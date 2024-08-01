@@ -2,10 +2,10 @@
 #include "my_device.h"
 
 extern struct my_device_t my_device;
+extern struct buffer buffer;
 
 static DECLARE_WAIT_QUEUE_HEAD(wait_queue_for_readers);
 static DECLARE_WAIT_QUEUE_HEAD(wait_queue_for_writers);
-static int has_input = 0, has_output_waiter = 0, small_buf_test_counter = 3;
 
 int open_d(struct inode *inode, struct file *filp) {
     printk(KERN_INFO DRIVER_NAME " OPENED!\n");
@@ -22,38 +22,38 @@ int release_d(struct inode *inode, struct file *filp) {
 ssize_t read_from_d(struct file *filp, char __user *ubuf, size_t len, loff_t *offset) {
     printk(KERN_INFO "READING from " DRIVER_NAME "\n");
 
-    has_output_waiter = 1;
-    wake_up_interruptible(&wait_queue_for_writers);
-    wait_event_interruptible(wait_queue_for_readers, has_input != 0);
-    has_input = 0;
+    if(my_device.read_blocking) {
+        // wake_up_interruptible(&wait_queue_for_writers);
+        wait_event_interruptible(wait_queue_for_readers, ((buffer.wend != buffer.start)||((buffer.wend == buffer.rstart)&&(buffer.wend != buffer.start))));
+    }
+    
+    int to_copy = buffer.wend - buffer.rstart;
+    if(to_copy == 0) buffer.wend = buffer.rstart = buffer.start;
+    copy_to_user(ubuf, buffer.data, to_copy);
+    buffer.rstart += to_copy;
+    (*offset) += to_copy;
 
-    // int to_copy = my_device.buf.pos - my_device.buf.start;
-    // copy_to_user(ubuf, my_device.buf.data, to_copy);
-    // my_device.buf.pos = my_device.buf.start;
-    // (*offset) += to_copy;
-
-    return 0;//to_copy;
+    return to_copy;
 }
 
 
 ssize_t write_to_d(struct file *filp, const char __user *ubuf, size_t len, loff_t *offset) {
     printk(KERN_INFO "WRITING to " DRIVER_NAME "\n");
     
-    do {
+    if(my_device.write_blocking) {
         has_input = 1;
         wake_up_interruptible(&wait_queue_for_readers);
         wait_event_interruptible(wait_queue_for_writers, has_output_waiter != 0);
         has_output_waiter = 0;
-        --small_buf_test_counter;
-    } while(small_buf_test_counter);
+    }
 
-    has_input = 1;
-    wake_up_interruptible(&wait_queue_for_readers);
-    small_buf_test_counter = 3;
+    copy_from_user(my_device.buffer.data, ubuf, len);
+    my_device.buffer.pos += len;
+    (*offset) += len;
 
-    // copy_from_user(my_device.buf.data, ubuf, len);
-    // my_device.buf.pos += len;
-    // (*offset) += len;
+    if(my_device.read_blocking) {
+        wake_up_interruptible(&wait_queue_for_readers);
+    }
 
     return len;
 }

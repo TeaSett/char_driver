@@ -37,7 +37,7 @@ int init_module() {
 		goto exit;
 	}
 
-	init_buffer(&(my_device.buf));
+	init_buffer();
 
     printk(KERN_INFO "Initialize %s SUCCESS!\n", DRIVER_NAME);
 

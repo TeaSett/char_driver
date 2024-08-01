@@ -1,7 +1,9 @@
 #include "buffer.h"
 
-void init_buffer(struct buffer *buf) {
-    buf->start = buf->data;
-    buf->end = buf->data;
-    buf->pos = buf->data;
+struct buffer buffer;
+
+void init_buffer() {
+    buffer.start = buffer.wend = buffer.rstart = buffer.data;
+    buffer.end = buffer.data+size;
+    // buffer.pos = buffer.data;
 }

@@ -14,5 +14,6 @@ struct my_device_t {
     dev_t num;
     struct class *class;
 
-    struct buffer buf;
+    bool write_blocking;
+    bool read_blocking;
 };
