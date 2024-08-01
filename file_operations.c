@@ -38,7 +38,7 @@ ssize_t read_from_d(struct file *filp, char __user *ubuf, size_t len, loff_t *of
 
 static int i = 0;
 ssize_t write_to_d(struct file *filp, const char __user *ubuf, size_t len, loff_t *offset) {
-    printk(KERN_INFO "WRITING to " DRIVER_NAME "\n");
+    printk(KERN_INFO "WRITING to " DRIVER_NAME " %d\n", len);
     
     // if(my_device.write_blocking) {
     //     has_input = 1;
