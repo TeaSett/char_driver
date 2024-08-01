@@ -14,7 +14,7 @@ int open_d(struct inode *inode, struct file *filp) {
 
 
 int release_d(struct inode *inode, struct file *filp) {
-    printk(KERN_INFO DRIVER_NAME " CLOSED!\n");
+    printk(KERN_INFO DRIVER_NAME " CLOSED!\n"); 
     return 0;
 }
 
