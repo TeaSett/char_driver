@@ -1,7 +1,7 @@
 #include "buffer.h"
 
-extern struct buffer buffer;
-extern unsigned long long size;
+struct buffer buffer;
+unsigned long long size;
 
 void init_buffer(char *allocated) {
     buffer.data = allocated;

@@ -5,10 +5,11 @@
 
 extern struct my_device_t my_device;
 extern size_t size;
+extern void print_operation_info(const char *op);
 
 int init_module() {
     int ret = 0;
-	printk(KERN_INFO "Initialize %s!\n", DRIVER_NAME);
+	print_operation_info("initialization");
 
 	/* Allocate a device nr */
 	if(alloc_chrdev_region(&my_device.num, 0, 1, DRIVER_NAME) < 0) {
@@ -42,7 +43,7 @@ int init_module() {
 	char *allocated = (char*)kmalloc(size, GFP_KERNEL);
 	init_buffer(allocated);
 
-    printk(KERN_INFO "Initialize %s SUCCESS!\n", DRIVER_NAME);
+    print_operation_info("initialization SUCCESS");
 
 exit:
     switch(ret) {

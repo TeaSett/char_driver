@@ -3,12 +3,14 @@
 
 extern struct my_device_t my_device;
 extern size_t size;
+extern void print_operation_info(const char *op);
 
 
 long ioctl_handler(struct file *file, unsigned int cmd, unsigned long arg) 
 {
     if (_IOC_TYPE(cmd) != MCD_IOCTL_NUM) return -EINVAL;
-    printk(KERN_INFO DRIVER_NAME " ioctl called. cmd = %d\n", cmd);
+    print_operation_info("IOCTL_HANDLER");
+    printk(KERN_INFO DRIVER_NAME " ioctl CMD = %d\n", cmd);
 
 
     switch(cmd) {
