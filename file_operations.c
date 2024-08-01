@@ -36,7 +36,7 @@ ssize_t read_from_d(struct file *filp, char __user *ubuf, size_t len, loff_t *of
     return to_copy;
 }
 
-
+static int i = 0;
 ssize_t write_to_d(struct file *filp, const char __user *ubuf, size_t len, loff_t *offset) {
     printk(KERN_INFO "WRITING to " DRIVER_NAME "\n");
     
@@ -47,13 +47,15 @@ ssize_t write_to_d(struct file *filp, const char __user *ubuf, size_t len, loff_
     //     has_output_waiter = 0;
     // }
 
-    copy_from_user(my_device.buffer.data, ubuf, len);
-    buffer.wend += len;
-    (*offset) += len;
+    ++i;
 
-    if(my_device.read_blocking) {
-        wake_up_interruptible(&wait_queue_for_readers);
-    }
+    // copy_from_user(my_device.buffer.data, ubuf, len);
+    // buffer.wend += len;
+    // (*offset) += len;
 
-    return len;
+    // if(my_device.read_blocking) {
+    //     wake_up_interruptible(&wait_queue_for_readers);
+    // }
+
+    return i;
 }
