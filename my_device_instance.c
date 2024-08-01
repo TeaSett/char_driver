@@ -20,6 +20,6 @@ struct my_device_t my_device = {
         .unlocked_ioctl = ioctl_handler
     },
 
-    write_blocking = true,
-    read_blocking = true
+    .write_blocking = true,
+    .read_blocking = true
 };

@@ -11,7 +11,7 @@ long ioctl_handler(struct file *file, unsigned int cmd, unsigned long arg)
 
 
     switch(cmd) {
-        case MCD_OUTPUT_BLOCK: {
+        case MCD_INPUT_AND_OUTPUT_BLOCK: {
             my_device.write_blocking = true;
             my_device.read_blocking = true;
             break;

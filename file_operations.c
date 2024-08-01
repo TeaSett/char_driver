@@ -48,7 +48,7 @@ ssize_t write_to_d(struct file *filp, const char __user *ubuf, size_t len, loff_
     // }
 
     copy_from_user(my_device.buffer.data, ubuf, len);
-    my_device.buffer.pos += len;
+    buffer.wend += len;
     (*offset) += len;
 
     if(my_device.read_blocking) {

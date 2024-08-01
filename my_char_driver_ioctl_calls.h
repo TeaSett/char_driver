@@ -1,7 +1,7 @@
-#include <linux/ioctl>
+#include <linux/ioctl.h>
 
 
-#define MCD_IOCTL_NUM 0x11
+#define MCD_IOCTL_NUM 0x12
 
 #define MCD_INPUT_BLOCK 				_IO(MCD_IOCTL_NUM, 1)
 #define MCD_INPUT_NONBLOCK              _IO(MCD_IOCTL_NUM, 2)

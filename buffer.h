@@ -6,4 +6,4 @@ struct buffer {
     // char *pos;
 };
 
-void init_buffer();
+void init_buffer(void);
