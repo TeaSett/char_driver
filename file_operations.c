@@ -1,4 +1,5 @@
 #include <linux/wait.h>
+#include <sys/errno.h>
 #include "my_device.h"
 
 extern struct my_device_t my_device;
@@ -31,7 +32,7 @@ ssize_t read_from_d(struct file *filp, char __user *ubuf, size_t len, loff_t *of
     
     int to_copy = buffer.wend - buffer.rstart;
     if(to_copy == 0) buffer.wend = buffer.rstart = buffer.start;
-    copy_to_user(ubuf, buffer.data, to_copy);
+    if(copy_to_user(ubuf, buffer.data, to_copy) != 0) return -EFAULT;
     buffer.rstart += to_copy;
     (*offset) += to_copy;
     wake_up_interruptible(&wait_queue_for_writers);
@@ -49,7 +50,7 @@ ssize_t write_to_d(struct file *filp, const char __user *ubuf, size_t len, loff_
     if(buffer.rstart != buffer.start) buffer.wend = buffer.rstart = buffer.start;
 
     int to_copy = min(size, len);
-    copy_from_user(buffer.data, ubuf, to_copy);
+    if(copy_from_user(buffer.data, ubuf, to_copy) != 0) return -EFAULT;
     buffer.wend += to_copy;
     (*offset) += to_copy;
 

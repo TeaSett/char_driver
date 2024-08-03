@@ -20,14 +20,14 @@ int init_module() {
 
 	/* Create device class */
 	if((my_device.class = class_create(THIS_MODULE, DRIVER_CLASS)) == NULL) {
-		printk(KERN_ERR "Device class can not be created!\n");
+		printk(KERN_ERR DRIVER_NAME ": device class can not be created!\n");
         ret = -1;
 		goto exit;
 	}
 
 	/* Create device file */
 	if(device_create(my_device.class, NULL, my_device.num, NULL, DRIVER_NAME) == NULL) {
-		printk(KERN_ERR "Can not create device file!\n");
+		printk(KERN_ERR DRIVER_NAME ": can not create device file!\n");
         ret = -2;
 		goto exit;
 	}
@@ -35,12 +35,17 @@ int init_module() {
 	/* Initialize device file */
 	cdev_init(&(my_device.dev), &(my_device.fops));
 	if(cdev_add(&(my_device.dev), my_device.num, 1) == -1) {
-		printk(KERN_ERR "Registering of device to kernel failed!\n");
+		printk(KERN_ERR DRIVER_NAME ": registering of device to kernel failed!\n");
         ret = -3;
 		goto exit;
 	}
 
-	char *allocated = (char*)kmalloc(size, GFP_KERNEL);
+	char *allocated;
+	if(!(allocated = (char*)kmalloc(size, GFP_KERNEL))) {
+		printk(KERN_ERR DRIVER_NAME ": buffer alocation is failed!\n");
+		ret = -3;
+		goto exit;
+	}
 	init_buffer(allocated);
 
     print_operation_info("initialization SUCCESS");
