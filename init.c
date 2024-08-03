@@ -2,6 +2,7 @@
 #include "my_device.h"
 
 #define DRIVER_CLASS "my_driver_class"
+enum {DEFAULT_SIZE = 1024};
 
 extern struct my_device_t my_device;
 extern size_t size;
@@ -40,6 +41,7 @@ int init_module() {
 		goto exit;
 	}
 
+	if(size == 0) size = DEFAULT_SIZE;
 	char *allocated;
 	if(!(allocated = (char*)kmalloc(size, GFP_KERNEL))) {
 		printk(KERN_ERR DRIVER_NAME ": buffer alocation is failed!\n");
